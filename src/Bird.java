@@ -11,6 +11,7 @@ public class Bird {
     public int posY = 50;
 
     public int jumpHeight = 5;
+    public boolean showHitbox = false;
 
     public float fallHeight = 0;
     public float fallHeightAcc = 0.000005f;
@@ -57,6 +58,19 @@ public class Bird {
     public void draw(Graphics2D g2d) {
 
         if(gameScreen.gameState == 50) {
+
+            if(showHitbox) {
+                g2d.setColor(Color.RED);
+                g2d.drawRect(collider.x, collider.y, collider.width, collider.height);
+
+                g2d.setColor(Color.BLUE);
+                g2d.drawRect(
+                        gameScreen.obstacleManager.colliders[0].x,
+                        gameScreen.obstacleManager.colliders[0].y,
+                        gameScreen.obstacleManager.colliders[0].width,
+                        gameScreen.obstacleManager.colliders[0].height
+                );
+            }
 
             g2d.drawImage(birdImage, (gameScreen.screenWidth / 2) - (gameScreen.tileSize / 2), posY, gameScreen.tileSize, gameScreen.tileSize, null);
         }

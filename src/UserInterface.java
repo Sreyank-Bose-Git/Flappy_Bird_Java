@@ -44,6 +44,7 @@ public class UserInterface {
         options[2] = "Jump Key: " + KeyEvent.getKeyText(gameScreen.keyHandler.jumpKey);
         options[3] = "Max Gravity: " + gameScreen.bird.maxGravity;
         options[4] = "Space Height: " + gameScreen.obstacleManager.spaceHeight;
+        options[5] = "Show Player HitBox: " + gameScreen.bird.showHitbox;
 
         writingTimer = new Timer(500, (e) -> {
             allowWriting = true;
@@ -162,6 +163,15 @@ public class UserInterface {
                 else if(option_selected == 4) {
                     gameScreen.obstacleManager.spaceHeight = (int) number;
                     options[4] = "Space Height: " + gameScreen.obstacleManager.spaceHeight;
+                }
+                else if(option_selected == 5) {
+                    if(number == 0) {
+                        gameScreen.bird.showHitbox = false;
+                    }
+                    else if(number == 1) {
+                        gameScreen.bird.showHitbox = true;
+                    }
+                    options[5] = "Show Player HitBox: " + gameScreen.bird.showHitbox;
                 }
 
                 gameScreen.gameState = 25;
