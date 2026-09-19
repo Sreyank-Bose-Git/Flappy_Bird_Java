@@ -28,7 +28,7 @@ public class GameScreen extends JPanel implements Runnable{
     public GameScreen() {
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.black);
+        this.setBackground(Color.gray);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
 

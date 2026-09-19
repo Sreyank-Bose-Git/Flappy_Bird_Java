@@ -54,7 +54,7 @@ public class UserInterface {
             if(gameScreen.keyHandler.keyCode == KeyEvent.VK_SPACE) {
                 gameScreen.gameState = 50;
                 gameScreen.obstacleManager.x = gameScreen.obstacleManager.spawn;
-                //gameScreen.obstacleManager.skyX = -100;
+                gameScreen.obstacleManager.skyX = 0;
             }
             else if(gameScreen.keyHandler.keyCode == KeyEvent.VK_BACK_SPACE) {
                 gameScreen.gameState = 25;
@@ -141,6 +141,10 @@ public class UserInterface {
                     gameScreen.FPS = (int) number;
                     gameScreen.drawInterval = 1000000000 / gameScreen.FPS;
                     options[option_selected] = "Maximum FPS: " + gameScreen.FPS;
+                }
+                if (option_selected == 1) {
+                    gameScreen.bird.fallHeightAcc = (int) number;
+                    options[option_selected] = "Gravity: " + gameScreen.bird.fallHeightAcc;
                 }
                 gameScreen.gameState = 25;
                 allowWriting = false;
