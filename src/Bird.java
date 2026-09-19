@@ -15,14 +15,16 @@ public class Bird {
     public float fallHeight = 0;
     public float fallHeightAcc = 0.000005f;
 
+    public int maxGravity = 3;
+
     Rectangle collider = new Rectangle();
 
     public Bird(GameScreen gameScreen) {
 
-        collider.x = (gameScreen.screenWidth / 2) - (gameScreen.tileSize / 2) + 5;
-        collider.y = posY + 5;
-        collider.width = gameScreen.tileSize - 10;
-        collider.height = gameScreen.tileSize - 10;
+        collider.x = (gameScreen.screenWidth / 2) - (gameScreen.tileSize / 2) + 10;
+        collider.y = posY + 15;
+        collider.width = gameScreen.tileSize - 20;
+        collider.height = gameScreen.tileSize - 30;
 
         this.gameScreen = gameScreen;
 
@@ -41,13 +43,13 @@ public class Bird {
                 fallHeight = 0.5f;
             }
             else {
-                if(fallHeight < 3) {
+                if(fallHeight < maxGravity) {
                     fallHeight += fallHeight + fallHeightAcc;
                 }
                 posY = (int) (posY + fallHeight);
             }
 
-            collider.y = posY;
+            collider.y = posY + 15;
             checkCollision();
         }
     }
@@ -55,6 +57,7 @@ public class Bird {
     public void draw(Graphics2D g2d) {
 
         if(gameScreen.gameState == 50) {
+
             g2d.drawImage(birdImage, (gameScreen.screenWidth / 2) - (gameScreen.tileSize / 2), posY, gameScreen.tileSize, gameScreen.tileSize, null);
         }
     }

@@ -16,6 +16,7 @@ public class UserInterface {
     double number = 0;
     boolean decimal = false;
     int dVal = 10;
+    int offset;
 
     boolean waitingForKey = false;
 
@@ -32,6 +33,7 @@ public class UserInterface {
 
         this.gameScreen = gameScreen;
 
+        offset = gameScreen.tileSize * 4;
         centre = (gameScreen.screenWidth / 2) - (gameScreen.tileSize / 2);
 
         for(int i = 0; i < total_options; i++) {
@@ -40,6 +42,8 @@ public class UserInterface {
         options[0] = "Maximum FPS: " + gameScreen.FPS;
         options[1] = "Gravity: " + gameScreen.bird.fallHeightAcc;
         options[2] = "Jump Key: " + KeyEvent.getKeyText(gameScreen.keyHandler.jumpKey);
+        options[3] = "Max Gravity: " + gameScreen.bird.maxGravity;
+        options[4] = "Space Height: " + gameScreen.obstacleManager.spaceHeight;
 
         writingTimer = new Timer(500, (e) -> {
             allowWriting = true;
@@ -55,12 +59,16 @@ public class UserInterface {
                 gameScreen.gameState = 50;
                 gameScreen.obstacleManager.x = gameScreen.obstacleManager.spawn;
                 gameScreen.obstacleManager.skyX = 0;
+                gameScreen.bird.posY = (gameScreen.screenHeight / 2) - (gameScreen.tileSize / 2);
+                points = 0;
             }
             else if(gameScreen.keyHandler.keyCode == KeyEvent.VK_BACK_SPACE) {
                 gameScreen.gameState = 25;
             }
         }
         else if(gameScreen.gameState == 25) {
+            offset = gameScreen.tileSize * 4;
+
             if((gameScreen.keyHandler.keyCode == KeyEvent.VK_DOWN && option_selected != total_options && options[option_selected + 1] != "") && allowWriting) {
                 option_selected++;
                 allowWriting = false;
@@ -88,6 +96,7 @@ public class UserInterface {
                 gameScreen.gameState = 26;
                 allowWriting = false;
             }
+            scroll();
         }
         else if(gameScreen.gameState == 26) {
             if(allowWriting && waitingForKey && gameScreen.keyHandler.keyCode != KeyEvent.VK_ENTER) {
@@ -142,10 +151,19 @@ public class UserInterface {
                     gameScreen.drawInterval = 1000000000 / gameScreen.FPS;
                     options[option_selected] = "Maximum FPS: " + gameScreen.FPS;
                 }
-                if (option_selected == 1) {
+                else if (option_selected == 1) {
                     gameScreen.bird.fallHeightAcc = (int) number;
                     options[option_selected] = "Gravity: " + gameScreen.bird.fallHeightAcc;
                 }
+                else if(option_selected == 3) {
+                    gameScreen.bird.maxGravity = (int) number;
+                    options[3] = "Max Gravity: " + gameScreen.bird.maxGravity;
+                }
+                else if(option_selected == 4) {
+                    gameScreen.obstacleManager.spaceHeight = (int) number;
+                    options[4] = "Space Height: " + gameScreen.obstacleManager.spaceHeight;
+                }
+
                 gameScreen.gameState = 25;
                 allowWriting = false;
             }
@@ -177,6 +195,21 @@ public class UserInterface {
         }
     }
 
+    public void scroll() {
+
+        int optionY = (gameScreen.tileSize * 2 * option_selected) + offset;
+
+        int topLimit = gameScreen.tileSize * 4;
+        int bottomLimit = gameScreen.screenHeight - gameScreen.tileSize * 2;
+
+        if(optionY < topLimit) {
+            offset += topLimit - optionY;
+        }
+        else if(optionY > bottomLimit) {
+            offset -= optionY - bottomLimit;
+        }
+    }
+
     public void draw(Graphics2D g2d) {
 
         if(gameScreen.gameState == 0) {
@@ -202,11 +235,11 @@ public class UserInterface {
             g2d.setColor(Color.white);
 
             for(int i = 0; i < total_options; i++) {
-                g2d.drawString(options[i], (gameScreen.screenWidth / 2) - (g2d.getFontMetrics().stringWidth(options[i]) / 2), (gameScreen.tileSize * 2 * i) + gameScreen.tileSize * 4);
+                g2d.drawString(options[i], (gameScreen.screenWidth / 2) - (g2d.getFontMetrics().stringWidth(options[i]) / 2), (gameScreen.tileSize * 2 * i) + offset);
             }
 
             g2d.setColor(Color.red);
-            g2d.drawRect(10, (option_selected * gameScreen.tileSize * 2) + (gameScreen.tileSize * 4) - 24, gameScreen.screenWidth - 20, 30);
+            g2d.drawRect(10, (option_selected * gameScreen.tileSize * 2) + (offset) - 24, gameScreen.screenWidth - 20, 30);
         }
         else if(gameScreen.gameState == 26) {
             g2d.setColor(Color.blue);

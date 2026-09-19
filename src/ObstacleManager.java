@@ -1,5 +1,6 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
@@ -11,6 +12,7 @@ public class ObstacleManager {
     int[] boxes = new int[4];
 
     BufferedImage skyImage;
+    BufferedImage tile;
 
     Rectangle[] colliders = new Rectangle[2];
 
@@ -68,6 +70,7 @@ public class ObstacleManager {
 
         try {
             skyImage = ImageIO.read(getClass().getResourceAsStream("/sky.jpg"));
+            tile = ImageIO.read(getClass().getResourceAsStream("/tile.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -115,19 +118,20 @@ public class ObstacleManager {
 
             for(int j = 0; j < boxes.length; j++) {
 
-                g2d.fillRect(
+                g2d.drawImage(
+                        tile,
                         x + (j * gap),
+                        boxes[j],
+                        x + (j * gap) + width,
                         0,
-                        width,
-                        boxes[j]
+                        0,
+                        0,
+                        tile.getWidth(),
+                        tile.getHeight(),
+                        null
                 );
 
-                g2d.fillRect(
-                        x + (j * gap),
-                        boxes[j] + spaceHeight,
-                        width,
-                        gameScreen.screenHeight - (boxes[j] + spaceHeight)
-                );
+                g2d.drawImage(tile, x + (j * gap), boxes[j] + spaceHeight, width, gameScreen.screenHeight - (boxes[j] + spaceHeight), null);
             }
         }
     }
